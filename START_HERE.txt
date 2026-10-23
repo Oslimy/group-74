@@ -1,0 +1,18 @@
+GROUP 74 - PPRL RESULTS PACKAGE
+
+** To see all figures and tables together, open results.html in any web browser. **
+   (double-click it, or right-click -> Open with -> your browser)
+
+CODE
+  exp_d4.py          five-model comparison on structured data (a few minutes)
+  quick_demo.py      fast single-setting demo, prints a table (~1 min)
+  text_experiment.py counting Bloom filter text encoder on the hospital notes
+  ml_linkage.py      pair features + cross-validation
+  BF.py, PPRL.py     supplied modules (unchanged)
+  Datasets/          Alice/Bob structured data
+  figs/              the figures
+  all_results_d4.csv, text_results.csv   result tables
+  Results_Document.docx  the full written results document
+
+SETUP (in this folder):  pip install bitarray scikit-learn xgboost matplotlib numpy pandas
+RUN:                     python3 quick_demo.py     (or exp_d4.py for the full run)
