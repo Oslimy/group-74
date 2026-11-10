@@ -4,6 +4,7 @@ GROUP 74 - PPRL RESULTS PACKAGE
    (double-click it, or right-click -> Open with -> your browser)
 
 CODE
+  run_tests.py       15 verification test cases TC01-TC15 (expect 15/15 PASS, seconds)
   exp_d4.py          five-model comparison on structured data (a few minutes)
   quick_demo.py      fast single-setting demo, prints a table (~1 min)
   text_experiment.py counting Bloom filter text encoder on the hospital notes
@@ -15,4 +16,10 @@ CODE
   Results_Document.docx  the full written results document
 
 SETUP (in this folder):  pip install bitarray scikit-learn xgboost matplotlib numpy pandas
-RUN:                     python3 quick_demo.py     (or exp_d4.py for the full run)
+RUN:                     python3 run_tests.py      (verification tests, 15/15 PASS)
+                         python3 quick_demo.py     (or exp_d4.py for the full run)
+                         python3 text_experiment.py <folder with the supplied hospital text CSVs>
+                           (train/test_hospital_A.csv, train/test_hospital_B.csv, train/test_labels.csv;
+                            not bundled - ~160 MB, supplied by the sponsor)
+
+Reproducibility: In the structured-data experiment (exp_d4.py), the threshold, Logistic Regression, SVM and XGBoost results reproduce exactly; only Random Forest is stochastic and can vary up to ~0.07 F1 between runs - it is the weakest under noise either way. In the text experiment (text_experiment.py), the no-noise row reproduces exactly; the noised rows (eps=7 and eps=3) can vary up to ~0.014 F1 because that perturbation is not seeded.

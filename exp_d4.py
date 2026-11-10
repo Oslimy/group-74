@@ -33,7 +33,7 @@ for size in (100,500):
         for m in METHODS:
             rows.append(dict(size=size,corr="corr_50",eps=lab,model=m,f1=np.mean(acc[m]),prec=np.mean(pr[m]),rec=np.mean(rc[m]),
                              secs=(np.mean(tm[m]) if m in MODELS else None),fpr=P["fpr"]))
-        data[(size,lab)]={m:round(float(np.mean(acc[m])),3) for m in METHODS}
+        data[f"{size}_{lab}"]={m:round(float(np.mean(acc[m])),3) for m in METHODS}
     print(f"size {size} done ({time.time()-t0:.0f}s)",flush=True)
 
 df=pd.DataFrame(rows); df.to_csv("all_results_d4.csv",index=False)
@@ -73,4 +73,4 @@ eff=df[(df["size"]==500)&(df.model.isin(list(MODELS)))].groupby("model").secs.me
 data["eff_500"]=eff
 data["corr"]={c:{m:round(cd[(cd["corr"]==c)&(cd.model==m)].f1.values[0],3) for m in ["thr_tuned","LR","RF","SVM","XGB"]} for c in corrs}
 open("summary_d4.json","w").write(json.dumps(data,indent=0))
-print("DONE %.0fs"%(time.time()-t0)); print(json.dumps(data["eff_500"])); print(json.dumps({str(k):v for k,v in data.items() if k in [(500,"7"),(500,"3"),(500,"1")]}))
+print("DONE %.0fs"%(time.time()-t0)); print(json.dumps(data["eff_500"])); print(json.dumps({k:v for k,v in data.items() if k in ["500_7","500_3","500_1"]}))

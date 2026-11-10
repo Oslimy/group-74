@@ -5,13 +5,20 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
 from sklearn.metrics import precision_score, recall_score, f1_score
 
-U = "/mnt/user-data/uploads/"
+import os, sys
+# Folder holding the supplied hospital text data (train/test_hospital_A/B.csv, train/test_labels.csv).
+# Pass it as an argument or set PPRL_TEXT_DATA; defaults to ./TextData then "../Multi-Party Data".
+U = next((d for d in ([sys.argv[1]] if len(sys.argv) > 1 else []) + [os.environ.get("PPRL_TEXT_DATA", ""), "TextData", "../Multi-Party Data"]
+          if d and os.path.isfile(os.path.join(d, "train_labels.csv"))), None)
+if U is None:
+    sys.exit("Hospital text data not found. Run:  python3 text_experiment.py <folder with train_hospital_A.csv ...>")
+U = os.path.join(U, "")
 rng = np.random.default_rng(0)
 
 def load(split, n):
-    A = pd.read_csv(U + ("1789810418627_train_hospital_A.csv" if split=="train" else "1789810418628_test_hospital_A.csv"))
-    B = pd.read_csv(U + ("1789810418628_train_hospital_B.csv" if split=="train" else "1789810418628_test_hospital_B.csv"))
-    L = pd.read_csv(U + ("1789810418628_train_labels.csv" if split=="train" else "1789810418629_test_labels.csv"))
+    A = pd.read_csv(U + ("train_hospital_A.csv" if split=="train" else "test_hospital_A.csv"))
+    B = pd.read_csv(U + ("train_hospital_B.csv" if split=="train" else "test_hospital_B.csv"))
+    L = pd.read_csv(U + ("train_labels.csv" if split=="train" else "test_labels.csv"))
     idx = rng.choice(len(A), size=min(n, len(A)), replace=False)
     return A.iloc[idx].reset_index(drop=True), B.iloc[idx].reset_index(drop=True), L.iloc[idx].reset_index(drop=True)
 
